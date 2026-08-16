@@ -67,3 +67,7 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+
+# IDE / local tool config
+.idea/
+.mcp.json
