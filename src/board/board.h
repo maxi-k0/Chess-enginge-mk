@@ -33,9 +33,9 @@ public:
     // Example FEN: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     void setFromFEN(const std::string& fen);
 
-    void placePiece(int peace,int square);
+    void placePiece(int piece,int square);
 
-    bool removePeace(int square);
+    bool removePiece(int square);
 
     void movePeace(int from, int to);
     bool isValid(int from, int to);

@@ -26,10 +26,10 @@ Board::Board() {
 
 }
 
-void Board::placePiece(int peace,int square) {
-    lookUpTable[square]=peace;
+void Board::placePiece(int piece,int square) {
+    lookUpTable[square]=piece;
     uint64_t mask = 1ULL << square;
-    switch (peace) {
+    switch (piece) {
         case W_PAWN:
             whitePawns |= mask;
             break;
@@ -74,15 +74,15 @@ void Board::placePiece(int peace,int square) {
     }
 }
 
-bool Board::removePeace(int square) {
-    int peace = lookUpTable[square];
-    if (peace == EMPTY) {
+bool Board::removePiece(int square) {
+    int piece = lookUpTable[square];
+    if (piece == EMPTY) {
         std::cout << " Das Feld ist schon leer ";
         return false;
     }
     lookUpTable[square]=EMPTY;
     uint64_t mask= ~(1ULL<<square);
-    switch (peace) {
+    switch (piece) {
         case W_PAWN:
             whitePawns &= mask;
             return true;
@@ -128,14 +128,14 @@ bool Board::removePeace(int square) {
 }
 
 void Board::movePeace(int from, int to) {
-    int peace = lookUpTable[from];
-    removePeace(from);
-    placePiece(peace,to);
+    int piece = lookUpTable[from];
+    removePiece(from);
+    placePiece(piece,to);
 }
 
 bool Board::isValid(int from, int to) {
-    int peace = lookUpTable[from];
-    switch (peace) {
+    int piece = lookUpTable[from];
+    switch (piece) {
         case W_PAWN:
 
             break;
