@@ -1,5 +1,6 @@
 #include "board/board.h"
 #include <iostream>
+#include <cstdint>
 
 Board::Board() {
     whitePawns= whiteKnights= whiteBishops= whiteRooks= whiteQueens= whiteKing=0ULL;
@@ -19,15 +20,15 @@ Board::Board() {
 
     const int backRank[8] = {W_ROOK, W_KNIGHT, W_BISHOP, W_KING,W_QUEEN, W_BISHOP, W_KNIGHT, W_ROOK};
     for (int file = 0; file < 8; file++) {
-        placePeace(file,backRank[file]);
-        placePeace(56 + file,-backRank[file]);
+        placePiece(file,backRank[file]);
+        placePiece(56 + file,-backRank[file]);
     }
 
 }
 
-void Board::placePeace(int peace,int square) {
+void Board::placePiece(int peace,int square) {
     lookUpTable[square]=peace;
-    __uint64_t mask = 1ULL << square;
+    uint64_t mask = 1ULL << square;
     switch (peace) {
         case W_PAWN:
             whitePawns|=mask;
@@ -79,7 +80,7 @@ bool Board::removePeace(int square) {
         return false;
     }
     lookUpTable[square]=EMPTY;
-    __uint64_t mask= ~(1ULL<<square);
+    uint64_t mask= ~(1ULL<<square);
     switch (peace) {
         case W_PAWN:
             whitePawns&=mask;
@@ -127,7 +128,7 @@ bool Board::removePeace(int square) {
 void Board::movePeace(int from, int to) {
     int peace= lookUpTable[from];
     removePeace(from);
-    placePeace(peace,to);
+    placePiece(peace,to);
 }
 bool isValid(int from, int to) {
 

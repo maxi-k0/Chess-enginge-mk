@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 #include "types.h"
 #include <string>
 
@@ -14,8 +16,8 @@
 class Board {
 public:
     //bitboards for pieces
-    __uint64_t whitePawns, whiteKnights, whiteBishops, whiteRooks, whiteQueens, whiteKing;
-    __uint64_t blackPawns, blackKnights, blackBishops, blackRooks, blackQueens, blackKing;
+    uint64_t whitePawns, whiteKnights, whiteBishops, whiteRooks, whiteQueens, whiteKing;
+    uint64_t blackPawns, blackKnights, blackBishops, blackRooks, blackQueens, blackKing;
     int lookUpTable[64];
 
     // Whose turn it is: WHITE (1) or BLACK (-1).
@@ -31,7 +33,7 @@ public:
     // Example FEN: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     void setFromFEN(const std::string& fen);
 
-    void placePeace(int peace,int square);
+    void placePiece(int peace,int square);
 
     bool removePeace(int square);
 
