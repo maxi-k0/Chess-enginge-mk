@@ -12,7 +12,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 # The executable is built from main.cpp plus everything found above.
-add_executable(chess_engine main.cpp ${SOURCES})
+add_executable(chess_engine main.cpp ${SOURCES}
+        src/bitboard_utils.h
+        src/move.h
+        src/attackTables.h)
 
 # Tell the compiler to look in src/ when resolving #include paths.
 # This means we can write  #include "board/board.h"  instead of

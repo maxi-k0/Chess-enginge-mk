@@ -5,6 +5,10 @@
 Board::Board() {
     whitePawns = whiteKnights = whiteBishops = whiteRooks = whiteQueens = whiteKing = 0ULL;
     blackPawns = blackKnights = blackBishops = blackRooks = blackQueens = blackKing = 0ULL;
+    whiteOccupancy = blackOccupancy = 0ULL;
+    entPassantSquare=-1;
+    whiteKingsideCastle=whiteQueenSideCastle=blackKingsideCastle=blackQueenSideCastle=true;
+    forcedRemis=0;
 
     for (int file = 8; file < 16; file++) {
         lookUpTable[file] = W_PAWN;
@@ -23,6 +27,8 @@ Board::Board() {
         placePiece(file,backRank[file]);
         placePiece(56 + file,-backRank[file]);
     }
+    whiteOccupancy=whiteBishops|whiteKing|whiteQueens|whiteKnights|whitePawns|whiteRooks;
+    blackOccupancy=blackBishops|blackKing|blackKnights|blackPawns|blackRooks|blackQueens;
 
 }
 
@@ -32,39 +38,51 @@ void Board::placePiece(int piece,int square) {
     switch (piece) {
         case W_PAWN:
             whitePawns |= mask;
+            whiteOccupancy |= mask;
             break;
         case W_KNIGHT:
             whiteKnights |= mask;
+            whiteOccupancy |= mask;
             break;
         case W_BISHOP:
             whiteBishops |= mask;
+            whiteOccupancy |= mask;
             break;
         case W_ROOK:
             whiteRooks |= mask;
+            whiteOccupancy |= mask;
             break;
         case W_QUEEN:
             whiteQueens |= mask;
+            whiteOccupancy |= mask;
             break;
         case W_KING:
             whiteKing |= mask;
+            whiteOccupancy |= mask;
             break;
         case B_PAWN:
             blackPawns |= mask;
+            blackOccupancy |= mask;
             break;
         case B_KNIGHT:
             blackKnights |= mask;
+            blackOccupancy |= mask;
             break;
         case B_BISHOP:
             blackBishops |= mask;
+            blackOccupancy |= mask;
             break;
         case B_ROOK:
             blackRooks |= mask;
+            blackOccupancy |= mask;
             break;
         case B_QUEEN:
             blackQueens |= mask;
+            blackOccupancy |= mask;
             break;
         case B_KING:
             blackKing |= mask;
+            blackOccupancy |= mask;
             break;
 
         default:
@@ -85,39 +103,51 @@ bool Board::removePiece(int square) {
     switch (piece) {
         case W_PAWN:
             whitePawns &= mask;
+            whiteOccupancy &= mask;
             return true;
         case W_KNIGHT:
             whiteKnights &= mask;
+            whiteOccupancy &= mask;
             return true;
         case W_BISHOP:
             whiteBishops &= mask;
+            whiteOccupancy &= mask;
             return true;
         case W_ROOK:
             whiteRooks &= mask;
+            whiteOccupancy &= mask;
             return true;
         case W_QUEEN:
             whiteQueens &= mask;
+            whiteOccupancy &= mask;
             return true;
         case W_KING:
             whiteKing &= mask;
+            whiteOccupancy &= mask;
             return true;
         case B_PAWN:
             blackPawns &= mask;
+            blackOccupancy &= mask;
             return true;
         case B_KNIGHT:
             blackKnights &= mask;
+            blackOccupancy &= mask;
             return true;
         case B_BISHOP:
             blackBishops &= mask;
+            blackOccupancy &= mask;
             return true;
         case B_ROOK:
             blackRooks &= mask;
+            blackOccupancy &= mask;
             return true;
         case B_QUEEN:
             blackQueens &= mask;
+            blackOccupancy &= mask;
             return true;
         case B_KING:
             blackKing &= mask;
+            blackOccupancy &= mask;
             return true;
 
         default:

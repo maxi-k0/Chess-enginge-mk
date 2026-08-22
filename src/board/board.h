@@ -16,8 +16,12 @@
 class Board {
 public:
     //bitboards for pieces
+    int entPassantSquare;
+    bool whiteKingsideCastle,whiteQueenSideCastle,blackKingsideCastle,blackQueenSideCastle;
+    uint8_t forcedRemis;
     uint64_t whitePawns, whiteKnights, whiteBishops, whiteRooks, whiteQueens, whiteKing;
     uint64_t blackPawns, blackKnights, blackBishops, blackRooks, blackQueens, blackKing;
+    uint64_t blackOccupancy, whiteOccupancy;
     int lookUpTable[64];
 
     // Whose turn it is: WHITE (1) or BLACK (-1).
