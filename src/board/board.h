@@ -22,7 +22,7 @@ public:
     uint64_t whitePawns, whiteKnights, whiteBishops, whiteRooks, whiteQueens, whiteKing;
     uint64_t blackPawns, blackKnights, blackBishops, blackRooks, blackQueens, blackKing;
     uint64_t blackOccupancy, whiteOccupancy;
-    int lookUpTable[64];
+    int lookUpTable[64]{};
 
     // Whose turn it is: WHITE (1) or BLACK (-1).
     int sideToMove = WHITE;
