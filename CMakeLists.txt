@@ -30,6 +30,8 @@ add_executable(chess_engine main.cpp ${SOURCES}
         src/moveGeneration/attackTables.h
         src/moveGeneration/slidingAttacks.cpp
         src/moveGeneration/slidingAttacks.h
+        src/moveGeneration/moveGen.cpp
+        src/moveGeneration/moveGen.h
 )
 target_include_directories(chess_engine PRIVATE src)
 
