@@ -38,7 +38,8 @@ target_include_directories(chess_engine PRIVATE src)
 file(GLOB_RECURSE TEST_SOURCES "tests/*.cpp")
 
 
-add_executable(chess_engine_tests ${TEST_SOURCES} ${SOURCES})
+add_executable(chess_engine_tests ${TEST_SOURCES} ${SOURCES}
+)
 target_include_directories(chess_engine_tests PRIVATE src)
 target_link_libraries(chess_engine_tests GTest::gtest_main)
 

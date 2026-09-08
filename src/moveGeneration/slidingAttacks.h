@@ -21,7 +21,9 @@ public:
     SlidingAttacks();
 
     uint64_t getRookAttacks(int square,uint64_t occupancy);
+    // occupancy is representing the pieces of the opposing player
     uint64_t getBishopAttacks(int square,uint64_t occupancy);
+    // occupancy is representing the pieces of the opposing player
     uint64_t getQueenAttacks(int square,uint64_t occupancy){return getRookAttacks(square,occupancy) | getBishopAttacks(square,occupancy);}
 
 };
