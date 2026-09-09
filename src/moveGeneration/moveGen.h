@@ -17,6 +17,8 @@ class MoveGen
 public:
     MoveGen(const attack_tables& attack_tables, SlidingAttacks& sliding_attacks);
     std::vector<Move> pseudo_legal_moves(const Board& board);
+    std::vector<Move> legal_moves(const Board& board);
+
     bool isSquareAttacked(const Board& board,int square, int side) const;
 private:
     const attack_tables& attack_tables_;

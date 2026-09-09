@@ -109,7 +109,6 @@ bool MoveGen::isSquareAttacked(const Board& board, int square, const int side) c
     {
         uint64_t occupancy = board.blackOccupancy;
         const int amountOfPieces = popCount(occupancy);
-        int piece;
         while (counter < amountOfPieces)
         {
             square = popLSB(occupancy);
@@ -122,13 +121,13 @@ bool MoveGen::isSquareAttacked(const Board& board, int square, const int side) c
                 attack |= attack_tables_.knightAttacks[square];
                 break;
             case B_BISHOP:
-                attack |= sliding_attacks_.getBishopAttacks(square, board.whiteOccupancy);
+                attack |= sliding_attacks_.getBishopAttacks(square, board.whiteOccupancy | board.blackOccupancy);
                 break;
             case B_ROOK:
-                attack |= sliding_attacks_.getRookAttacks(square, board.whiteOccupancy);
+                attack |= sliding_attacks_.getRookAttacks(square, board.whiteOccupancy | board.blackOccupancy);
                 break;
             case B_QUEEN:
-                attack |= sliding_attacks_.getQueenAttacks(square, board.whiteOccupancy);
+                attack |= sliding_attacks_.getQueenAttacks(square, board.whiteOccupancy | board.blackOccupancy);
                 break;
             case B_KING:
                 attack |= attack_tables_.kingAttacks[square];
@@ -142,7 +141,6 @@ bool MoveGen::isSquareAttacked(const Board& board, int square, const int side) c
     {
         uint64_t occupancy = board.whiteOccupancy;
         const int amountOfPieces = popCount(occupancy);
-        int piece;
         while (counter < amountOfPieces)
         {
             square = popLSB(occupancy);
@@ -155,13 +153,13 @@ bool MoveGen::isSquareAttacked(const Board& board, int square, const int side) c
                 attack |= attack_tables_.knightAttacks[square];
                 break;
             case W_BISHOP:
-                attack |= sliding_attacks_.getBishopAttacks(square, board.blackOccupancy);
+                attack |= sliding_attacks_.getBishopAttacks(square, board.blackOccupancy | board.whiteOccupancy);
                 break;
             case W_ROOK:
-                attack |= sliding_attacks_.getRookAttacks(square, board.blackOccupancy);
+                attack |= sliding_attacks_.getRookAttacks(square, board.blackOccupancy | board.whiteOccupancy);
                 break;
             case W_QUEEN:
-                attack |= sliding_attacks_.getQueenAttacks(square, board.blackOccupancy);
+                attack |= sliding_attacks_.getQueenAttacks(square, board.blackOccupancy | board.whiteOccupancy);
                 break;
             case W_KING:
                 attack |= attack_tables_.kingAttacks[square];
@@ -176,6 +174,11 @@ bool MoveGen::isSquareAttacked(const Board& board, int square, const int side) c
         std::cout << "The value is the side can't be evaluated. Error occurred in:isSquareAttacked";
     }
     return (bit & attack) != 0;
+}
+
+std::vector<Move> MoveGen::legal_moves(const Board& board)
+{
+
 }
 
 std::vector<Move> MoveGen::pseudo_legal_moves(const Board& board)
@@ -217,6 +220,10 @@ std::vector<Move> MoveGen::pseudo_legal_moves(const Board& board)
                         {
                             addMoveToList(result, square, toTemp, W_PAWN, capturedPiece, 0, false, false, false);
                         }
+                        else if (toTemp == board.entPassantSquare)
+                        {
+                            addMoveToList(result, square, toTemp, W_PAWN, B_PAWN, 0, true, false, false);
+                        }
                         j++;
                     }
                 }
@@ -255,14 +262,12 @@ std::vector<Move> MoveGen::pseudo_legal_moves(const Board& board)
     {
         uint64_t blackOccupancyCopy = board.blackOccupancy;
         int amountOfPieces = popCount(blackOccupancyCopy);
-        generatePawnPushes(board,result);
 
         while (counter < amountOfPieces)
         {
             square = popLSB(blackOccupancyCopy);
             piece = board.lookUpTable[square];
             uint64_t attack;
-            int amountOfBitsInAttack;
             switch (piece)
             {
             case B_PAWN:
@@ -293,20 +298,31 @@ std::vector<Move> MoveGen::pseudo_legal_moves(const Board& board)
                 addAttacksToMoveList(attack_tables_.knightAttacks[square] & ~board.blackOccupancy,square,B_KNIGHT,board,result);
                 break;
             case B_BISHOP:
-                addAttacksToMoveList(sliding_attacks_.getBishopAttacks(square,(board.blackOccupancy |board.whiteOccupancy)),square,B_BISHOP,board,result);
+                addAttacksToMoveList(sliding_attacks_.getBishopAttacks(square,(board.blackOccupancy |board.whiteOccupancy)) & ~board.blackOccupancy,square,B_BISHOP,board,result);
                 break;
             case B_ROOK:
-                addAttacksToMoveList(sliding_attacks_.getRookAttacks(square,(board.blackOccupancy |board.whiteOccupancy)),square,B_ROOK,board,result);
+                addAttacksToMoveList(sliding_attacks_.getRookAttacks(square,(board.blackOccupancy |board.whiteOccupancy)) & ~board.blackOccupancy,square,B_ROOK,board,result);
 
                 break;
             case B_QUEEN:
-                addAttacksToMoveList(sliding_attacks_.getQueenAttacks(square,(board.blackOccupancy |board.whiteOccupancy)),square,B_QUEEN,board,result);
+                addAttacksToMoveList(sliding_attacks_.getQueenAttacks(square,(board.blackOccupancy |board.whiteOccupancy)) & ~board.blackOccupancy,square,B_QUEEN,board,result);
                 break;
             case B_KING:
-
+                {
+                    addAttacksToMoveList(attack_tables_.kingAttacks[square] & ~board.blackOccupancy, square, B_KING, board, result);
+                    const uint64_t occupancy = board.whiteOccupancy | board.blackOccupancy;
+                    if (board.blackKingsideCastle && (occupancy & 0x6000000000000000ULL) == 0){
+                        addMoveToList(result,square,square+2,B_KING,EMPTY,0,false,true,false);
+                    }
+                    if (board.blackQueenSideCastle && (occupancy & 0x0E00000000000000ULL) == 0)
+                    {
+                        addMoveToList(result,square,square-2,B_KING,EMPTY,0,false,true,false);
+                    }
+                }
                 break;
             default: ;
             }
+            counter++;
         }
     }
 

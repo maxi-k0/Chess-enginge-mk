@@ -32,6 +32,7 @@ add_executable(chess_engine main.cpp ${SOURCES}
         src/moveGeneration/slidingAttacks.h
         src/moveGeneration/moveGen.cpp
         src/moveGeneration/moveGen.h
+        src/board/UndoInfo.h
 )
 target_include_directories(chess_engine PRIVATE src)
 

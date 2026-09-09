@@ -1,6 +1,4 @@
-//
-// Created by maxi- on 22.08.2026.
-//
+
 
 #ifndef CHESS_ENGINE_MOVE_H
 #define CHESS_ENGINE_MOVE_H

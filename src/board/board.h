@@ -4,6 +4,10 @@
 
 #include "types.h"
 #include <string>
+#include <vector>
+
+#include "UndoInfo.h"
+#include "moveGeneration/move.h"
 
 // ---------------------------------------------------------------------------
 // Board
@@ -37,10 +41,15 @@ public:
     // Example FEN: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     void setFromFEN(const std::string& fen);
 
+    UndoInfo makeMove(const Move& move);
+
+    void unmake(const Move& move,UndoInfo undo_info);
+
+
     void placePiece(int piece,int square);
 
     bool removePiece(int square);
 
-    void movePeace(int from, int to);
+    void movePiece(int from, int to);
     bool isValid(int from, int to);
 };

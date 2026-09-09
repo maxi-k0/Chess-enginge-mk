@@ -8,7 +8,7 @@ int main() {
     std::string line;
 
     board = Board();
-    board.print(-1);
+    board.print(1);
     // The UCI loop: we read one command per line from stdin and respond to stdout.
     // A GUI like Arena or Cute Chess launches your engine as a subprocess and
     // communicates exactly this way — plain text in, plain text out.

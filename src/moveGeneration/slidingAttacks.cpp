@@ -7,7 +7,7 @@
 
 namespace
 {
-    // attackIn Direction takes the rays and cuts them at the blocker bit. The Occupancy is representing the pieces of the enemy.
+    // attackIn Direction takes the rays and cuts them at the blocker bit. // combined occupancy of both sides, needed to find the nearest blocker in either direction
     uint64_t attackInDirection(int square, uint64_t ray[], uint64_t occupancy, bool forwardDirection)
     {
         uint64_t blocker = ray[square] & occupancy;
@@ -86,7 +86,9 @@ SlidingAttacks::SlidingAttacks()
         rayNorthWest[i]=attacksNorthWest;
     }
 }
-// occupancy is representing the pieces of the opposing player
+// you need to & ~color.occupancy the result of the methods because the methods don't differentiate between the pieces. So you need to make sure that your own pieces won't be targeted
+
+// combined occupancy of both sides, needed to find the nearest blocker in either direction
 uint64_t SlidingAttacks::getRookAttacks(int square, uint64_t occupancy)
 {
     uint64_t rookAttack = 0ULL;
@@ -96,7 +98,7 @@ uint64_t SlidingAttacks::getRookAttacks(int square, uint64_t occupancy)
         | attackInDirection(square, rayEast, occupancy, true);
     return rookAttack;
 }
-// occupancy is representing the pieces of the opposing player
+// combined occupancy of both sides, needed to find the nearest blocker in either direction
 uint64_t SlidingAttacks::getBishopAttacks(int square, uint64_t occupancy)
 {
     uint64_t bishopAttack = 0ULL;
